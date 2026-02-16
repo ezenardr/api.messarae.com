@@ -83,6 +83,13 @@
     qs "^6.14.0"
     raw-body "^3.0.1"
 
+"@adonisjs/bouncer@^3.1.6":
+  version "3.1.6"
+  resolved "https://registry.yarnpkg.com/@adonisjs/bouncer/-/bouncer-3.1.6.tgz#63eb343bf8f81226fbb43401ec94cf7af923c774"
+  integrity sha512-vBTaiY3JpQaVo8ZnrRH4km1mBxc1SlAmjAzuYDF9zX9rl9nIxDPKWIDojBpYQXr13SvmOS+BKfACtV55l8g6Cw==
+  dependencies:
+    "@poppinss/utils" "^6.9.4"
+
 "@adonisjs/config@^5.0.3":
   version "5.0.3"
   resolved "https://registry.yarnpkg.com/@adonisjs/config/-/config-5.0.3.tgz#5c6aa8e10313514f0a5c47f64c092067ae309bdc"
@@ -1303,6 +1310,11 @@ basic-auth@^2.0.1:
   dependencies:
     safe-buffer "5.1.2"
 
+bignumber.js@^9.0.0:
+  version "9.3.1"
+  resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-9.3.1.tgz#759c5aaddf2ffdc4f154f7b493e1c8770f88c4d7"
+  integrity sha512-Ko0uX15oIUS7wJ3Rb30Fs6SkVbLmPBAKdlm7q9+ak9bbIeFf0MwuBsQV6z7+X768/cHsfg+WlysDWJcmthjsjQ==
+
 brace-expansion@^1.1.7:
   version "1.1.12"
   resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-1.1.12.tgz#ab9b454466e5a8cc3a187beaad580412a9c5b843"
@@ -2488,6 +2500,13 @@ jsesc@~3.0.2:
   resolved "https://registry.yarnpkg.com/jsesc/-/jsesc-3.0.2.tgz#bb8b09a6597ba426425f2e4a07245c3d00b9343e"
   integrity sha512-xKqzzWXDttJuOcawBt4KnKHHIf5oQ/Cxax+0PWFG+DFDgHNAdi+TXECADI+RYiFUMmx8792xsMbbgXj4CwnP4g==
 
+json-bigint@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/json-bigint/-/json-bigint-1.0.0.tgz#ae547823ac0cad8398667f8cd9ef4730f5b01ff1"
+  integrity sha512-SiPv/8VpZuWbvLSMtTDU8hEfrZWg/mH/nV/b4o0CYbSxu1UIQPLdwKOCIyLQX+VIPO5vrLX3i8qtqFyhdPSUSQ==
+  dependencies:
+    bignumber.js "^9.0.0"
+
 json-buffer@3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/json-buffer/-/json-buffer-3.0.1.tgz#9338802a30d3b6605fbe0613e094008ca8c05a13"
@@ -2799,6 +2818,19 @@ negotiator@0.6.3:
   version "0.6.3"
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.3.tgz#58e323a72fedc0d6f9cd4d31fe49f51479590ccd"
   integrity sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==
+
+node-appwrite@^22.1.0:
+  version "22.1.0"
+  resolved "https://registry.yarnpkg.com/node-appwrite/-/node-appwrite-22.1.0.tgz#7872692d30caf66ae5fdf14e3760d69b823bc58b"
+  integrity sha512-OLwOhlLf/aHI+ahhFPltQG53TOzGxcdugqPXIfx6+tEgB1utKNV7gLAxm6qFjZ5ozhXJusCwRRlv76Rl8gmpYg==
+  dependencies:
+    json-bigint "1.0.0"
+    node-fetch-native-with-agent "1.7.2"
+
+node-fetch-native-with-agent@1.7.2:
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/node-fetch-native-with-agent/-/node-fetch-native-with-agent-1.7.2.tgz#13b74160f2c1a856c656534bfe7984da5eb5172f"
+  integrity sha512-5MaOOCuJEvcckoz7/tjdx1M6OusOY6Xc5f459IaruGStWnKzlI1qpNgaAwmn4LmFYcsSlj+jBMk84wmmRxfk5g==
 
 node-releases@^2.0.27:
   version "2.0.27"

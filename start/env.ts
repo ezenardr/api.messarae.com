@@ -36,4 +36,13 @@ export default await Env.create(new URL('../', import.meta.url), {
   |----------------------------------------------------------
   */
   JWT_SECRET: Env.schema.string(),
+  /*
+  |----------------------------------------------------------
+  | Variables for configuring APPWRITE
+  |----------------------------------------------------------
+  */
+  APPWRITE_SECRET: Env.schema.string(),
+  APPWRITE_ENDPOINT: Env.schema.string(),
+  APPWRITE_READ_BUCKET_ID: Env.schema.string(),
+  APPWRITE_PROJECT_ID: Env.schema.string(),
 })

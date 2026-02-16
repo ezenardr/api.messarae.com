@@ -11,10 +11,10 @@ export default class AuthController {
   async register(ctx: HttpContext) {
     try {
       const { headers, ...payload } = await ctx.request.validateUsing(registerUserValidator)
-      const user_existed = await User.findBy('email', payload.email)
-      if (user_existed) {
+      const userExisted = await User.findBy('email', payload.email)
+      if (userExisted) {
         return ctx.response.safeStatus(400).json({
-          status: 'error',
+          success: false,
           message:
             'Cette adresse email est déjà associée à un compte existant. Veuillez vous connecter.',
         })
@@ -59,15 +59,15 @@ export default class AuthController {
       const { token } = ctx.params
       const decoded = jwt.verify(token, env.get('JWT_SECRET'))
       const { type, iat, exp, ...data } = decoded as JwtPayload
-      const user_existed = await User.findBy('email', data.email)
-      if (user_existed) {
+      const userExisted = await User.findBy('email', data.email)
+      if (userExisted) {
         return ctx.response.safeStatus(400).json({
           status: 'failed',
           message:
             'Cette adresse email est déjà associée à un compte existant. Veuillez vous connecter.',
         })
       }
-      await User.create({ ...data, role: 'user' })
+      await User.create({ ...data, role: 1 })
       return ctx.response.safeStatus(201).json({
         success: true,
         user: {
