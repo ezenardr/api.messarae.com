@@ -84,6 +84,9 @@ export default class ReadsController {
       }
       const { headers, ...payload } = await ctx.request.validateUsing(SaveReadDraftValidator)
       if (payload.image) {
+        if (read.imageFileId) {
+          await AppwriteStorageService.deleteFile(read.imageFileId)
+        }
         const fs = await import('node:fs/promises')
         const fileBuffer = await fs.readFile(payload.image?.tmpPath!)
         const uploaded = await AppwriteStorageService.upload(fileBuffer, read.readDraftId)
@@ -92,6 +95,7 @@ export default class ReadsController {
         read.content = payload.content
         read.category = payload.category
         read.imageUrl = AppwriteStorageService.getPreviewUrl(uploaded.$id)
+        read.imageFileId = uploaded.$id
         await read.save()
       } else {
         read.title = payload.title
@@ -135,18 +139,5 @@ export default class ReadsController {
         message: 'Une erreure est survenue: ' + error.message,
       })
     }
-  }
-
-  // In your controller
-  async proxyImage({ request, response }: HttpContext) {
-    const { url } = request.qs()
-    if (!url) return response.badRequest({ message: 'URL required' })
-
-    const res = await fetch(url)
-    const buffer = await res.arrayBuffer()
-    const contentType = res.headers.get('content-type') ?? 'image/jpeg'
-
-    response.header('Content-Type', contentType)
-    return response.send(Buffer.from(buffer))
   }
 }

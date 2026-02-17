@@ -4,8 +4,6 @@ import router from '@adonisjs/core/services/router'
 
 router
   .group(() => {
-    // routes.ts
-    router.get('/proxy/image', [ReadsController, 'proxyImage'])
     router.get('/author', [ReadsController, 'getAuthorReads'])
     router.get('/drafts/:readDraftId', [ReadsController, 'getDraftRead'])
     router.post('/drafts', [ReadsController, 'createDraftRead'])

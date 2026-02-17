@@ -46,7 +46,7 @@ class AppwriteStorageService {
 
   // Delete a file
   async deleteFile(fileId: string) {
-    return await this.storage.deleteFile(this.bucketId, fileId)
+    return await this.storage.deleteFile({ bucketId: this.bucketId, fileId })
   }
 }
 

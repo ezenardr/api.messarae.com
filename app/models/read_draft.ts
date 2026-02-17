@@ -19,6 +19,9 @@ export default class ReadDraft extends BaseModel {
   declare imageUrl: string | null | undefined
 
   @column()
+  declare imageFileId: string | null | undefined
+
+  @column()
   declare category: string | null | undefined
 
   @column()

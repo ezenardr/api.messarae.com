@@ -10,6 +10,7 @@ export default class extends BaseSchema {
       table.string('title').nullable()
       table.string('description').nullable()
       table.text('image_url').nullable()
+      table.text('image_file_id').nullable()
       table.text('category').nullable()
       table.text('content').nullable()
 
