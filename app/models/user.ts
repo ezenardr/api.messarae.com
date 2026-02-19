@@ -27,11 +27,32 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column()
   declare profileImageUrl: string | undefined
 
+  @column()
+  declare imageFileId: string | null | undefined
+
   @column({ serializeAs: null })
   declare password: string
 
   @column()
   declare role: 1 | 2 | 3 | 4
+
+  @column()
+  declare newRead: boolean
+
+  @column()
+  declare newWatch: boolean
+
+  @column()
+  declare newsletter: boolean
+
+  @column()
+  declare accountActivity: boolean
+
+  @column()
+  declare resendCount: number
+
+  @column.dateTime()
+  declare lastResendAt: DateTime
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

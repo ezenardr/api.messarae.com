@@ -61,7 +61,6 @@ export default class ReadsController {
   async saveDraftRead(ctx: HttpContext) {
     try {
       const { readDraftId } = ctx.request.params()
-      // console.log(ctx.request.files('image'))/
       const user = await ctx.auth.authenticate()
       if (await ctx.bouncer.with(UserPolicies).denies('createReads')) {
         return ctx.response.safeStatus(403).json({

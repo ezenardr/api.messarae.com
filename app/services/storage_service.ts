@@ -13,7 +13,7 @@ class AppwriteStorageService {
       .setKey(env.get('APPWRITE_SECRET'))
 
     this.storage = new Storage(client)
-    this.bucketId = env.get('APPWRITE_READ_BUCKET_ID')!
+    this.bucketId = env.get('APPWRITE_BUCKET_ID')!
   }
   // Upload a file
   async upload(buffer: Buffer, filename: string) {
