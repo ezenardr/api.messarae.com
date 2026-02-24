@@ -13,3 +13,14 @@ export const SaveReadDraftValidator = vine.compile(
     }),
   })
 )
+
+export const PublishReadValidator = vine.compile(
+  vine.object({
+    featured: vine.boolean(),
+    readDraftId: vine.string().uuid({ version: [4] }),
+    headers: vine.object({
+      'origin': vine.string(),
+      'accept-language': vine.string(),
+    }),
+  })
+)
