@@ -4,8 +4,25 @@ import { PublishReadValidator, SaveReadDraftValidator } from '#validators/read'
 import type { HttpContext } from '@adonisjs/core/http'
 import AppwriteStorageService from '#services/storage_service'
 import Read from '#models/read'
+import deslugify from './utils/deslugify.js'
 
 export default class ReadsController {
+  async getReads(ctx: HttpContext) {
+    try {
+      const reads = await Read.query().preload('user').orderBy('created_at', 'desc')
+      return ctx.response.safeStatus(200).json({
+        success: true,
+        reads,
+      })
+    } catch (error) {
+      console.error(error)
+      return ctx.response.safeStatus(error.status || 500).json({
+        success: false,
+        message: 'Une erreure est survenue: ' + error.message,
+      })
+    }
+  }
+
   async createDraftRead(ctx: HttpContext) {
     try {
       const user = await ctx.auth.authenticate()
@@ -263,6 +280,66 @@ export default class ReadsController {
         success: true,
         read,
         author,
+      })
+    } catch (error) {
+      console.error(error)
+      return ctx.response.safeStatus(error.status || 500).json({
+        success: false,
+        message: 'Une erreure est survenue: ' + error.message,
+      })
+    }
+  }
+
+  async getReadBySlug(ctx: HttpContext) {
+    try {
+      const { slug } = ctx.request.params()
+      const title = deslugify(slug)
+      const read = await Read.query()
+        .where('title', decodeURIComponent(title))
+        .preload('user')
+        .first()
+      if (!read) {
+        return ctx.response.safeStatus(404).json({
+          success: false,
+          message: 'Article introuvable',
+        })
+      }
+      return ctx.response.safeStatus(200).json({
+        success: true,
+        read,
+      })
+    } catch (error) {
+      console.error(error)
+      return ctx.response.safeStatus(error.status || 500).json({
+        success: false,
+        message: 'Une erreure est survenue: ' + error.message,
+      })
+    }
+  }
+
+  async getReadBySlugWithRelated(ctx: HttpContext) {
+    try {
+      const { slug } = ctx.request.params()
+      const title = deslugify(slug)
+      const read = await Read.query()
+        .where('title', decodeURIComponent(title))
+        .preload('user')
+        .first()
+      if (!read) {
+        return ctx.response.safeStatus(404).json({
+          success: false,
+          message: 'Article introuvable',
+        })
+      }
+      const related = await Read.query()
+        .where('category', read.category)
+        .whereNot('readId', read.readId)
+        .preload('user')
+        .limit(3)
+      return ctx.response.safeStatus(200).json({
+        success: true,
+        read,
+        related,
       })
     } catch (error) {
       console.error(error)
