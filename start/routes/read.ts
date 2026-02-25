@@ -8,7 +8,6 @@ router.get('/reads/:slug', [ReadsController, 'getReadBySlug'])
 router.get('/reads/:slug/related', [ReadsController, 'getReadBySlugWithRelated'])
 router
   .group(() => {
-    router.get('/author', [ReadsController, 'getAuthorReads'])
     router.get('/drafts/:readDraftId', [ReadsController, 'getDraftRead'])
     router.post('/drafts', [ReadsController, 'createDraftRead'])
     router.put('/drafts/:readDraftId', [ReadsController, 'saveDraftRead'])
@@ -17,6 +16,13 @@ router
     router.get('/:readId', [ReadsController, 'getReadById'])
   })
   .prefix('/reads')
+  .use(middleware.auth())
+
+router
+  .group(() => {
+    router.get('/reads', [ReadsController, 'getAuthorReads'])
+  })
+  .prefix('/author')
   .use(middleware.auth())
 
 router
