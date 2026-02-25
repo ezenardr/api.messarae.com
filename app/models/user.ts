@@ -7,6 +7,7 @@ import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
 import { v4 as uuid } from 'uuid'
 import Read from './read.js'
 import * as relations from '@adonisjs/lucid/types/relations'
+import ReadDraft from './read_draft.js'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -70,5 +71,8 @@ export default class User extends compose(BaseModel, AuthFinder) {
   }
 
   @hasMany(() => Read, { foreignKey: 'userId' })
-  declare posts: relations.HasMany<typeof Read>
+  declare read: relations.HasMany<typeof Read>
+
+  @hasMany(() => ReadDraft, { foreignKey: 'userId' })
+  declare draft: relations.HasMany<typeof ReadDraft>
 }

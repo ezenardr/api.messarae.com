@@ -1,6 +1,8 @@
 import { DateTime } from 'luxon'
-import { BaseModel, beforeCreate, column } from '@adonisjs/lucid/orm'
+import { BaseModel, beforeCreate, belongsTo, column } from '@adonisjs/lucid/orm'
 import { v4 as uuid } from 'uuid'
+import User from './user.js'
+import * as relations from '@adonisjs/lucid/types/relations'
 
 export default class ReadDraft extends BaseModel {
   @column({ isPrimary: true })
@@ -37,4 +39,7 @@ export default class ReadDraft extends BaseModel {
   static assignUUID(readDraft: ReadDraft) {
     readDraft.readDraftId = uuid()
   }
+
+  @belongsTo(() => User, { foreignKey: 'userId' })
+  declare user: relations.BelongsTo<typeof User>
 }

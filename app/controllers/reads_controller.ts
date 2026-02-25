@@ -244,8 +244,8 @@ export default class ReadsController {
           message: "Vous n'êtes pas autorisé à créer d'article",
         })
       }
-      const drafts = await ReadDraft.query().where('userId', user.userId)
-      const reads = await Read.query().where('userId', user.userId)
+      const drafts = await ReadDraft.query().where('userId', user.userId).preload('user')
+      const reads = await Read.query().where('userId', user.userId).preload('user')
       return ctx.response.safeStatus(200).json({
         success: true,
         drafts,
