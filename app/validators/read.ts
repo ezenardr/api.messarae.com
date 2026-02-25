@@ -24,3 +24,14 @@ export const PublishReadValidator = vine.compile(
     }),
   })
 )
+
+export const AddCommentReadValidator = vine.compile(
+  vine.object({
+    comment: vine.string().minLength(3).maxLength(500),
+    readId: vine.string().uuid({ version: [4] }),
+    headers: vine.object({
+      'origin': vine.string(),
+      'accept-language': vine.string(),
+    }),
+  })
+)

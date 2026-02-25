@@ -1,8 +1,9 @@
 import { DateTime } from 'luxon'
-import { BaseModel, beforeCreate, belongsTo, column } from '@adonisjs/lucid/orm'
+import { BaseModel, beforeCreate, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
 import { v4 as uuid } from 'uuid'
 import User from './user.js'
 import * as relations from '@adonisjs/lucid/types/relations'
+import ReadComment from './read_comment.js'
 
 export default class Read extends BaseModel {
   @column({ isPrimary: true })
@@ -45,4 +46,7 @@ export default class Read extends BaseModel {
 
   @belongsTo(() => User, { foreignKey: 'userId' })
   declare user: relations.BelongsTo<typeof User>
+
+  @hasMany(() => ReadComment, { foreignKey: 'readId' })
+  declare readComments: relations.HasMany<typeof ReadComment>
 }

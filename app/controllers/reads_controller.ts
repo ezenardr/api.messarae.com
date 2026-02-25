@@ -1,15 +1,21 @@
 import ReadDraft from '#models/read_draft'
 import UserPolicies from '#policies/user_policies'
-import { PublishReadValidator, SaveReadDraftValidator } from '#validators/read'
+import {
+  AddCommentReadValidator,
+  PublishReadValidator,
+  SaveReadDraftValidator,
+} from '#validators/read'
 import type { HttpContext } from '@adonisjs/core/http'
 import AppwriteStorageService from '#services/storage_service'
 import Read from '#models/read'
 import deslugify from './utils/deslugify.js'
+import ReadComment from '#models/read_comment'
 
 export default class ReadsController {
   async getReads(ctx: HttpContext) {
     try {
-      const reads = await Read.query().preload('user').orderBy('created_at', 'desc')
+      const { limit = 15 } = ctx.request.qs()
+      const reads = await Read.query().preload('user').orderBy('created_at', 'desc').limit(limit)
       return ctx.response.safeStatus(200).json({
         success: true,
         reads,
@@ -324,6 +330,7 @@ export default class ReadsController {
       const read = await Read.query()
         .where('title', decodeURIComponent(title))
         .preload('user')
+        .preload('readComments', (comment) => comment.preload('user'))
         .first()
       if (!read) {
         return ctx.response.safeStatus(404).json({
@@ -365,6 +372,34 @@ export default class ReadsController {
       return ctx.response.safeStatus(200).json({
         success: true,
         categories,
+      })
+    } catch (error) {
+      console.error(error)
+      return ctx.response.safeStatus(error.status || 500).json({
+        success: false,
+        message: 'Une erreure est survenue: ' + error.message,
+      })
+    }
+  }
+
+  async addReadComment(ctx: HttpContext) {
+    try {
+      const user = await ctx.auth.authenticate()
+      const { headers, ...payload } = await ctx.request.validateUsing(AddCommentReadValidator)
+      const read = await Read.findBy('readId', payload.readId)
+      if (!read) {
+        return ctx.response.safeStatus(404).json({
+          success: false,
+          message: 'Article introuvable',
+        })
+      }
+      await ReadComment.create({
+        comment: payload.comment,
+        readId: read.readId,
+        userId: user.userId,
+      })
+      return ctx.response.safeStatus(200).json({
+        success: true,
       })
     } catch (error) {
       console.error(error)

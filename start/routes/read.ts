@@ -3,7 +3,7 @@ import { middleware } from '#start/kernel'
 import router from '@adonisjs/core/services/router'
 
 router.get('/categories', [ReadsController, 'getCategories'])
-router.get('/reads', [ReadsController, 'getReads'])
+router.get('/reads/:limit?', [ReadsController, 'getReads'])
 router.get('/reads/:slug', [ReadsController, 'getReadBySlug'])
 router.get('/reads/:slug/related', [ReadsController, 'getReadBySlugWithRelated'])
 router
@@ -17,4 +17,11 @@ router
     router.get('/:readId', [ReadsController, 'getReadById'])
   })
   .prefix('/reads')
+  .use(middleware.auth())
+
+router
+  .group(() => {
+    router.post('/read', [ReadsController, 'addReadComment'])
+  })
+  .prefix('/comments')
   .use(middleware.auth())
