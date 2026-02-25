@@ -21,6 +21,9 @@ router
 router
   .group(() => {
     router.get('/reads', [ReadsController, 'getAuthorReads'])
+    router.get('/reads/:readId', [ReadsController, 'getReadById'])
+    router.post('/reads/drafts', [ReadsController, 'createDraftRead'])
+    router.get('/reads/drafts/:readDraftId', [ReadsController, 'getDraftRead'])
   })
   .prefix('/author')
   .use(middleware.auth())
