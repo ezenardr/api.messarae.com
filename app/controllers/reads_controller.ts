@@ -342,7 +342,7 @@ export default class ReadsController {
         .where('category', read.category)
         .whereNot('readId', read.readId)
         .preload('user')
-        .limit(3)
+        .limit(6)
       return ctx.response.safeStatus(200).json({
         success: true,
         read,
