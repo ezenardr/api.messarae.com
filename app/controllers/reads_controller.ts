@@ -2,6 +2,7 @@ import ReadDraft from '#models/read_draft'
 import UserPolicies from '#policies/user_policies'
 import {
   AddCommentReadValidator,
+  AddToFavorite,
   PublishReadValidator,
   SaveReadDraftValidator,
 } from '#validators/read'
@@ -10,12 +11,17 @@ import AppwriteStorageService from '#services/storage_service'
 import Read from '#models/read'
 import deslugify from './utils/deslugify.js'
 import ReadComment from '#models/read_comment'
+import Favorite from '#models/favorite'
 
 export default class ReadsController {
   async getReads(ctx: HttpContext) {
     try {
       const { limit = 15 } = ctx.request.qs()
-      const reads = await Read.query().preload('user').orderBy('created_at', 'desc').limit(limit)
+      const reads = await Read.query()
+        .preload('user')
+        .preload('favorites')
+        .orderBy('created_at', 'desc')
+        .limit(limit)
       return ctx.response.safeStatus(200).json({
         success: true,
         reads,
@@ -331,6 +337,7 @@ export default class ReadsController {
         .where('title', decodeURIComponent(title))
         .preload('user')
         .preload('readComments', (comment) => comment.preload('user'))
+        .preload('favorites')
         .first()
       if (!read) {
         return ctx.response.safeStatus(404).json({
@@ -342,6 +349,7 @@ export default class ReadsController {
         .where('category', read.category)
         .whereNot('readId', read.readId)
         .preload('user')
+        .preload('favorites')
         .limit(6)
       return ctx.response.safeStatus(200).json({
         success: true,
@@ -382,6 +390,27 @@ export default class ReadsController {
     }
   }
 
+  async getArticleForCategory(ctx: HttpContext) {
+    try {
+      const { category } = ctx.request.params()
+      const reads = await Read.query()
+        .where('category', decodeURIComponent(category))
+        .preload('favorites')
+        .preload('user')
+
+      return ctx.response.safeStatus(200).json({
+        success: true,
+        reads,
+      })
+    } catch (error) {
+      console.error(error)
+      return ctx.response.safeStatus(error.status || 500).json({
+        success: false,
+        message: 'Une erreure est survenue: ' + error.message,
+      })
+    }
+  }
+
   async addReadComment(ctx: HttpContext) {
     try {
       const user = await ctx.auth.authenticate()
@@ -400,6 +429,89 @@ export default class ReadsController {
       })
       return ctx.response.safeStatus(200).json({
         success: true,
+      })
+    } catch (error) {
+      console.error(error)
+      return ctx.response.safeStatus(error.status || 500).json({
+        success: false,
+        message: 'Une erreure est survenue: ' + error.message,
+      })
+    }
+  }
+
+  async addToFavorite(ctx: HttpContext) {
+    try {
+      const user = await ctx.auth.authenticate()
+      const { headers, ...payload } = await ctx.request.validateUsing(AddToFavorite)
+      const read = await Read.findBy('readId', payload.readId)
+      if (!read) {
+        return ctx.response.safeStatus(404).json({
+          success: false,
+          message: 'Article introuvable',
+        })
+      }
+      await Favorite.create({ readId: read.readId, userId: user.userId })
+      return ctx.response.safeStatus(200).json({
+        success: true,
+      })
+    } catch (error) {
+      console.error(error)
+      return ctx.response.safeStatus(error.status || 500).json({
+        success: false,
+        message: 'Une erreure est survenue: ' + error.message,
+      })
+    }
+  }
+
+  async removeFromFavorite(ctx: HttpContext) {
+    try {
+      const user = await ctx.auth.authenticate()
+      const { headers, ...payload } = await ctx.request.validateUsing(AddToFavorite)
+      const read = await Read.findBy('readId', payload.readId)
+      if (!read) {
+        return ctx.response.safeStatus(404).json({
+          success: false,
+          message: 'Article introuvable',
+        })
+      }
+      const favorite = await Favorite.query()
+        .where('userId', user.userId)
+        .andWhere('readId', read.readId)
+        .first()
+      if (!favorite) {
+        return ctx.response.safeStatus(404).json({
+          success: false,
+          message: "Vous n'aviez pas aimé cet article",
+        })
+      }
+      await favorite.delete()
+      return ctx.response.safeStatus(200).json({
+        success: true,
+      })
+    } catch (error) {
+      console.error(error)
+      return ctx.response.safeStatus(error.status || 500).json({
+        success: false,
+        message: 'Une erreure est survenue: ' + error.message,
+      })
+    }
+  }
+
+  async getUserFavorites(ctx: HttpContext) {
+    try {
+      const user = await ctx.auth.authenticate()
+      const favorites = await Favorite.query().where('userId', user.userId)
+      const favoriteReadIds: string[] = []
+      favorites.forEach((favorite) => {
+        favoriteReadIds.push(favorite.readId)
+      })
+      const reads = await Read.query()
+        .whereIn('readId', favoriteReadIds)
+        .preload('favorites')
+        .preload('user')
+      return ctx.response.safeStatus(200).json({
+        success: true,
+        reads,
       })
     } catch (error) {
       console.error(error)

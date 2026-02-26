@@ -8,6 +8,7 @@ import { v4 as uuid } from 'uuid'
 import Read from './read.js'
 import * as relations from '@adonisjs/lucid/types/relations'
 import ReadDraft from './read_draft.js'
+import Favorite from './favorite.js'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -75,4 +76,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @hasMany(() => ReadDraft, { foreignKey: 'userId' })
   declare draft: relations.HasMany<typeof ReadDraft>
+
+  @hasMany(() => Favorite, { foreignKey: 'userId' })
+  declare favorites: relations.HasMany<typeof Favorite>
 }

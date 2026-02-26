@@ -35,3 +35,13 @@ export const AddCommentReadValidator = vine.compile(
     }),
   })
 )
+
+export const AddToFavorite = vine.compile(
+  vine.object({
+    readId: vine.string().uuid({ version: [4] }),
+    headers: vine.object({
+      'origin': vine.string(),
+      'accept-language': vine.string(),
+    }),
+  })
+)

@@ -3,6 +3,7 @@ import { middleware } from '#start/kernel'
 import router from '@adonisjs/core/services/router'
 
 router.get('/categories', [ReadsController, 'getCategories'])
+router.get('/categories/:category', [ReadsController, 'getArticleForCategory'])
 router.get('/reads/:limit?', [ReadsController, 'getReads'])
 router.get('/reads/:slug', [ReadsController, 'getReadBySlug'])
 router.get('/reads/:slug/related', [ReadsController, 'getReadBySlugWithRelated'])
@@ -33,4 +34,13 @@ router
     router.post('/read', [ReadsController, 'addReadComment'])
   })
   .prefix('/comments')
+  .use(middleware.auth())
+
+router
+  .group(() => {
+    router.get('/', [ReadsController, 'getUserFavorites'])
+    router.post('/', [ReadsController, 'addToFavorite'])
+    router.delete('/', [ReadsController, 'removeFromFavorite'])
+  })
+  .prefix('/favorites')
   .use(middleware.auth())

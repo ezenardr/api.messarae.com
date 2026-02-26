@@ -4,6 +4,7 @@ import { v4 as uuid } from 'uuid'
 import User from './user.js'
 import * as relations from '@adonisjs/lucid/types/relations'
 import ReadComment from './read_comment.js'
+import Favorite from './favorite.js'
 
 export default class Read extends BaseModel {
   @column({ isPrimary: true })
@@ -49,4 +50,7 @@ export default class Read extends BaseModel {
 
   @hasMany(() => ReadComment, { foreignKey: 'readId' })
   declare readComments: relations.HasMany<typeof ReadComment>
+
+  @hasMany(() => Favorite, { foreignKey: 'readId' })
+  declare favorites: relations.HasMany<typeof Favorite>
 }
