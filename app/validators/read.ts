@@ -6,7 +6,7 @@ export const SaveReadDraftValidator = vine.compile(
     description: vine.string().nullable().optional(),
     content: vine.string().nullable().optional(),
     category: vine.string().nullable().optional(),
-    image: vine.file({ size: '500kb' }).optional().nullable(),
+    image: vine.file({ size: '1024kb' }).optional().nullable(),
     headers: vine.object({
       'origin': vine.string(),
       'accept-language': vine.string(),
