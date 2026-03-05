@@ -11,6 +11,7 @@ import router from '@adonisjs/core/services/router'
 import './routes/auth.js'
 import './routes/read.js'
 import './routes/user.js'
+import './routes/admin.js'
 const UsersController = () => import('#controllers/users_controller')
 
 router.get('/', async () => {

@@ -16,6 +16,7 @@ export const UserActions = {
   'reads:create': iota(),
   'reads:delete': iota(),
   'reads:update': iota(),
+  'admin:permission': iota(),
 } as const
 
 export type UserAction = (typeof UserActions)[keyof typeof UserActions]
@@ -28,7 +29,7 @@ const AuthorPermission =
   UserActions['reads:delete'] |
   UserActions['reads:update']
 
-const AdminPermission = AuthorPermission
+const AdminPermission = AuthorPermission | UserActions['admin:permission']
 
 const OwnerPermission = AdminPermission
 

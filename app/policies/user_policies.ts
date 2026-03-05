@@ -8,6 +8,10 @@ export default class UserPolicies extends BasePolicy {
   async createReads(user: User): Promise<AuthorizerResponse> {
     return can(user.role, UserActions['reads:create'])
   }
+
+  async adminRights(user: User): Promise<AuthorizerResponse> {
+    return can(user.role, UserActions['admin:permission'])
+  }
   // async addMember(user: User, organisation: Organisation): Promise<AuthorizerResponse> {
   //   const role = await getUserRole(user, organisation)
   //   return can(role, UserActions['team:add'])

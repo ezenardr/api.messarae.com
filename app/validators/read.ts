@@ -45,3 +45,14 @@ export const AddToFavorite = vine.compile(
     }),
   })
 )
+
+export const SetFeaturedReadValidator = vine.compile(
+  vine.object({
+    readId: vine.string().uuid({ version: [4] }),
+    featured: vine.boolean(),
+    headers: vine.object({
+      'origin': vine.string(),
+      'accept-language': vine.string(),
+    }),
+  })
+)
