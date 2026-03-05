@@ -306,10 +306,7 @@ export default class ReadsController {
     try {
       const { slug } = ctx.request.params()
       const title = deslugify(slug)
-      const read = await Read.query()
-        .where('title', decodeURIComponent(title))
-        .preload('user')
-        .first()
+      const read = await Read.query().where('title', title).preload('user').first()
       if (!read) {
         return ctx.response.safeStatus(404).json({
           success: false,
@@ -334,7 +331,7 @@ export default class ReadsController {
       const { slug } = ctx.request.params()
       const title = deslugify(slug)
       const read = await Read.query()
-        .where('title', decodeURIComponent(title))
+        .where('title', title)
         .preload('user')
         .preload('readComments', (comment) => comment.preload('user'))
         .preload('favorites')
@@ -351,6 +348,7 @@ export default class ReadsController {
         .preload('user')
         .preload('favorites')
         .limit(6)
+
       return ctx.response.safeStatus(200).json({
         success: true,
         read,
