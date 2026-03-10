@@ -15,7 +15,7 @@ export default class extends BaseSchema {
       table.enum('role', [1, 2, 3, 4]).defaultTo(1)
       table.boolean('new_read').notNullable().defaultTo(true)
       table.boolean('new_watch').notNullable().defaultTo(true)
-      table.boolean('newsletter').notNullable().defaultTo(false)
+      table.boolean('newsletter').notNullable().defaultTo(true)
       table.boolean('account_activity').notNullable().defaultTo(true)
       table.integer('resend_count').defaultTo(0)
       table.timestamp('last_resend_at').nullable()
