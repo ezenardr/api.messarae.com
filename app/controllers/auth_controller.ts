@@ -88,10 +88,7 @@ export default class AuthController {
         from: 'Onboarding - De vous à moi <hello@messarae.com>',
         to: data.email,
         template: {
-          id: 'welcoming',
-          variables: {
-            FIRSTNAME: data.firstName,
-          },
+          id: 'email-welcome',
         },
       })
       return ctx.response.safeStatus(201).json({
