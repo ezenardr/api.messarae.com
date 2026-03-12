@@ -1,5 +1,6 @@
 import app from '@adonisjs/core/services/app'
 import { HttpContext, ExceptionHandler } from '@adonisjs/core/http'
+import rollbar from '#services/rollbar'
 
 export default class HttpExceptionHandler extends ExceptionHandler {
   /**
@@ -23,6 +24,16 @@ export default class HttpExceptionHandler extends ExceptionHandler {
    * @note You should not attempt to send a response from this method.
    */
   async report(error: unknown, ctx: HttpContext) {
+    rollbar.error(error as Error, {
+      request: {
+        url: ctx.request.url(),
+        method: ctx.request.method(),
+        headers: ctx.request.headers(),
+        body: ctx.request.body(),
+      },
+      user: ctx.auth?.user ?? undefined,
+    })
+
     return super.report(error, ctx)
   }
 }

@@ -6,6 +6,7 @@ import {
 } from '#validators/user'
 import type { HttpContext } from '@adonisjs/core/http'
 import AppwriteStorageService from '#services/storage_service'
+import rollbar from '#services/rollbar'
 
 export default class UsersController {
   async getUser(ctx: HttpContext) {
@@ -17,6 +18,13 @@ export default class UsersController {
       })
     } catch (error) {
       console.error(error)
+      rollbar.error(error, {
+        request: {
+          url: ctx.request.completeUrl(true),
+          method: ctx.request.method(),
+          body: ctx.request.body(),
+        },
+      })
       return ctx.response.safeStatus(error.status || 500).json({
         success: false,
         message: 'Failed to get user: ' + error.message,
@@ -40,6 +48,13 @@ export default class UsersController {
       })
     } catch (error) {
       console.error(error)
+      rollbar.error(error, {
+        request: {
+          url: ctx.request.completeUrl(true),
+          method: ctx.request.method(),
+          body: ctx.request.body(),
+        },
+      })
       return ctx.response.safeStatus(error.status || 500).json({
         success: false,
         message: 'Failed to get user role: ' + error.message,
@@ -60,6 +75,13 @@ export default class UsersController {
       })
     } catch (error) {
       console.error(error)
+      rollbar.error(error, {
+        request: {
+          url: ctx.request.completeUrl(true),
+          method: ctx.request.method(),
+          body: ctx.request.body(),
+        },
+      })
       return ctx.response.safeStatus(error.status || 50).json({
         success: false,
         message: 'Une erreur est survenue: ' + error.message,
@@ -86,6 +108,13 @@ export default class UsersController {
       })
     } catch (error) {
       console.error(error)
+      rollbar.error(error, {
+        request: {
+          url: ctx.request.completeUrl(true),
+          method: ctx.request.method(),
+          body: ctx.request.body(),
+        },
+      })
       return ctx.response.safeStatus(error.status || 50).json({
         success: false,
         message: 'Une erreur est survenue: ' + error.message,
@@ -109,6 +138,13 @@ export default class UsersController {
       })
     } catch (error) {
       console.error(error)
+      rollbar.error(error, {
+        request: {
+          url: ctx.request.completeUrl(true),
+          method: ctx.request.method(),
+          body: ctx.request.body(),
+        },
+      })
       return ctx.response.safeStatus(error.status || 50).json({
         success: false,
         message: 'Une erreur est survenue: ' + error.message,

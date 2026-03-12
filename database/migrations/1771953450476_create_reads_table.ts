@@ -14,6 +14,7 @@ export default class extends BaseSchema {
       table.text('category').notNullable()
       table.text('content').notNullable()
       table.boolean('featured').defaultTo(false)
+      table.boolean('archived').defaultTo(false)
 
       table.timestamp('created_at')
       table.timestamp('updated_at')

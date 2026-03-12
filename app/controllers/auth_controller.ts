@@ -12,6 +12,7 @@ import { Resend } from 'resend'
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import hash from '@adonisjs/core/services/hash'
 import { DateTime } from 'luxon'
+import rollbar from '#services/rollbar'
 
 const resend = new Resend(env.get('RESEND_API_KEY'))
 
@@ -55,6 +56,13 @@ export default class AuthController {
       })
     } catch (error) {
       console.error(error)
+      rollbar.error(error, {
+        request: {
+          url: ctx.request.completeUrl(true),
+          method: ctx.request.method(),
+          body: ctx.request.body(),
+        },
+      })
       return ctx.response.safeStatus(error.safeStatus || 500).json({
         success: false,
         message: 'Une erreur est survenue : ' + error.message,
@@ -85,6 +93,13 @@ export default class AuthController {
       })
     } catch (error) {
       console.error(error)
+      rollbar.error(error, {
+        request: {
+          url: ctx.request.completeUrl(true),
+          method: ctx.request.method(),
+          body: ctx.request.body(),
+        },
+      })
       return ctx.response.safeStatus(error.safeStatus || 500).json({
         success: false,
         message: 'Une erreur est survenue : ' + error.message,
@@ -113,6 +128,13 @@ export default class AuthController {
       })
     } catch (error) {
       console.error(error)
+      rollbar.error(error, {
+        request: {
+          url: ctx.request.completeUrl(true),
+          method: ctx.request.method(),
+          body: ctx.request.body(),
+        },
+      })
       return ctx.response.safeStatus(error.safeStatus || 500).json({
         success: false,
         message: 'Une erreur est survenue : ' + error.message,
@@ -201,6 +223,13 @@ export default class AuthController {
       })
     } catch (error) {
       console.error(error)
+      rollbar.error(error, {
+        request: {
+          url: ctx.request.completeUrl(true),
+          method: ctx.request.method(),
+          body: ctx.request.body(),
+        },
+      })
       return ctx.response.safeStatus(400).json({
         success: false,
         message: 'Something went wrong : ' + error.message,
@@ -250,6 +279,13 @@ export default class AuthController {
       })
     } catch (error) {
       console.error(error)
+      rollbar.error(error, {
+        request: {
+          url: ctx.request.completeUrl(true),
+          method: ctx.request.method(),
+          body: ctx.request.body(),
+        },
+      })
       return ctx.response.safeStatus(error.status || 500).json({
         success: false,
         message: "Nous n'avons pas pu changer votre mot de passe" + error.message,

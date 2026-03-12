@@ -45,4 +45,11 @@ export default await Env.create(new URL('../', import.meta.url), {
   APPWRITE_ENDPOINT: Env.schema.string(),
   APPWRITE_BUCKET_ID: Env.schema.string(),
   APPWRITE_PROJECT_ID: Env.schema.string(),
+  /*
+  |----------------------------------------------------------
+  | Variables for configuring ROLLBAR
+  |----------------------------------------------------------
+  */
+  ROLLBAR_ACCESS_TOKEN: Env.schema.string(),
+  ROLLBAR_ENVIRONMENT: Env.schema.string(),
 })

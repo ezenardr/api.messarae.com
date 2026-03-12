@@ -34,6 +34,9 @@ export default class Read extends BaseModel {
   @column()
   declare featured: boolean
 
+  @column()
+  declare archived: boolean
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 

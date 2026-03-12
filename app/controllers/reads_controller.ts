@@ -12,6 +12,7 @@ import Read from '#models/read'
 import deslugify from './utils/deslugify.js'
 import ReadComment from '#models/read_comment'
 import Favorite from '#models/favorite'
+import rollbar from '#services/rollbar'
 
 export default class ReadsController {
   async getReads(ctx: HttpContext) {
@@ -28,6 +29,13 @@ export default class ReadsController {
       })
     } catch (error) {
       console.error(error)
+      rollbar.error(error, {
+        request: {
+          url: ctx.request.completeUrl(true),
+          method: ctx.request.method(),
+          body: ctx.request.body(),
+        },
+      })
       return ctx.response.safeStatus(error.status || 500).json({
         success: false,
         message: 'Une erreure est survenue: ' + error.message,
@@ -51,6 +59,13 @@ export default class ReadsController {
       })
     } catch (error) {
       console.error(error)
+      rollbar.error(error, {
+        request: {
+          url: ctx.request.completeUrl(true),
+          method: ctx.request.method(),
+          body: ctx.request.body(),
+        },
+      })
       return ctx.response.safeStatus(error.status || 500).json({
         success: false,
         message: 'Une erreure est survenue: ' + error.message,
@@ -87,6 +102,13 @@ export default class ReadsController {
       })
     } catch (error) {
       console.error(error)
+      rollbar.error(error, {
+        request: {
+          url: ctx.request.completeUrl(true),
+          method: ctx.request.method(),
+          body: ctx.request.body(),
+        },
+      })
       return ctx.response.safeStatus(error.status || 500).json({
         success: false,
         message: 'Une erreure est survenue: ' + error.message,
@@ -146,6 +168,13 @@ export default class ReadsController {
       })
     } catch (error) {
       console.error(error)
+      rollbar.error(error, {
+        request: {
+          url: ctx.request.completeUrl(true),
+          method: ctx.request.method(),
+          body: ctx.request.body(),
+        },
+      })
       return ctx.response.safeStatus(error.status || 500).json({
         success: false,
         message: 'Une erreure est survenue: ' + error.message,
@@ -186,6 +215,13 @@ export default class ReadsController {
       })
     } catch (error) {
       console.error(error)
+      rollbar.error(error, {
+        request: {
+          url: ctx.request.completeUrl(true),
+          method: ctx.request.method(),
+          body: ctx.request.body(),
+        },
+      })
       return ctx.response.safeStatus(error.status || 500).json({
         success: false,
         message: 'Une erreure est survenue: ' + error.message,
@@ -234,6 +270,13 @@ export default class ReadsController {
       })
     } catch (error) {
       console.error(error)
+      rollbar.error(error, {
+        request: {
+          url: ctx.request.completeUrl(true),
+          method: ctx.request.method(),
+          body: ctx.request.body(),
+        },
+      })
       return ctx.response.safeStatus(error.status || 500).json({
         success: false,
         message: 'Une erreure est survenue: ' + error.message,
@@ -259,6 +302,13 @@ export default class ReadsController {
       })
     } catch (error) {
       console.error(error)
+      rollbar.error(error, {
+        request: {
+          url: ctx.request.completeUrl(true),
+          method: ctx.request.method(),
+          body: ctx.request.body(),
+        },
+      })
       return ctx.response.safeStatus(error.status || 500).json({
         success: false,
         message: 'Une erreure est survenue: ' + error.message,
@@ -295,6 +345,13 @@ export default class ReadsController {
       })
     } catch (error) {
       console.error(error)
+      rollbar.error(error, {
+        request: {
+          url: ctx.request.completeUrl(true),
+          method: ctx.request.method(),
+          body: ctx.request.body(),
+        },
+      })
       return ctx.response.safeStatus(error.status || 500).json({
         success: false,
         message: 'Une erreure est survenue: ' + error.message,
@@ -319,6 +376,13 @@ export default class ReadsController {
       })
     } catch (error) {
       console.error(error)
+      rollbar.error(error, {
+        request: {
+          url: ctx.request.completeUrl(true),
+          method: ctx.request.method(),
+          body: ctx.request.body(),
+        },
+      })
       return ctx.response.safeStatus(error.status || 500).json({
         success: false,
         message: 'Une erreure est survenue: ' + error.message,
@@ -356,6 +420,13 @@ export default class ReadsController {
       })
     } catch (error) {
       console.error(error)
+      rollbar.error(error, {
+        request: {
+          url: ctx.request.completeUrl(true),
+          method: ctx.request.method(),
+          body: ctx.request.body(),
+        },
+      })
       return ctx.response.safeStatus(error.status || 500).json({
         success: false,
         message: 'Une erreure est survenue: ' + error.message,
@@ -381,6 +452,13 @@ export default class ReadsController {
       })
     } catch (error) {
       console.error(error)
+      rollbar.error(error, {
+        request: {
+          url: ctx.request.completeUrl(true),
+          method: ctx.request.method(),
+          body: ctx.request.body(),
+        },
+      })
       return ctx.response.safeStatus(error.status || 500).json({
         success: false,
         message: 'Une erreure est survenue: ' + error.message,
@@ -402,6 +480,13 @@ export default class ReadsController {
       })
     } catch (error) {
       console.error(error)
+      rollbar.error(error, {
+        request: {
+          url: ctx.request.completeUrl(true),
+          method: ctx.request.method(),
+          body: ctx.request.body(),
+        },
+      })
       return ctx.response.safeStatus(error.status || 500).json({
         success: false,
         message: 'Une erreure est survenue: ' + error.message,
@@ -430,6 +515,13 @@ export default class ReadsController {
       })
     } catch (error) {
       console.error(error)
+      rollbar.error(error, {
+        request: {
+          url: ctx.request.completeUrl(true),
+          method: ctx.request.method(),
+          body: ctx.request.body(),
+        },
+      })
       return ctx.response.safeStatus(error.status || 500).json({
         success: false,
         message: 'Une erreure est survenue: ' + error.message,
@@ -454,6 +546,13 @@ export default class ReadsController {
       })
     } catch (error) {
       console.error(error)
+      rollbar.error(error, {
+        request: {
+          url: ctx.request.completeUrl(true),
+          method: ctx.request.method(),
+          body: ctx.request.body(),
+        },
+      })
       return ctx.response.safeStatus(error.status || 500).json({
         success: false,
         message: 'Une erreure est survenue: ' + error.message,
@@ -488,6 +587,13 @@ export default class ReadsController {
       })
     } catch (error) {
       console.error(error)
+      rollbar.error(error, {
+        request: {
+          url: ctx.request.completeUrl(true),
+          method: ctx.request.method(),
+          body: ctx.request.body(),
+        },
+      })
       return ctx.response.safeStatus(error.status || 500).json({
         success: false,
         message: 'Une erreure est survenue: ' + error.message,
@@ -513,6 +619,13 @@ export default class ReadsController {
       })
     } catch (error) {
       console.error(error)
+      rollbar.error(error, {
+        request: {
+          url: ctx.request.completeUrl(true),
+          method: ctx.request.method(),
+          body: ctx.request.body(),
+        },
+      })
       return ctx.response.safeStatus(error.status || 500).json({
         success: false,
         message: 'Une erreure est survenue: ' + error.message,

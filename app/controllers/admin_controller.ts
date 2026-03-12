@@ -1,5 +1,6 @@
 import Read from '#models/read'
 import UserPolicies from '#policies/user_policies'
+import rollbar from '#services/rollbar'
 import { SetFeaturedReadValidator } from '#validators/read'
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -19,6 +20,13 @@ export default class AdminController {
       })
     } catch (error) {
       console.error(error)
+      rollbar.error(error, {
+        request: {
+          url: ctx.request.completeUrl(true),
+          method: ctx.request.method(),
+          body: ctx.request.body(),
+        },
+      })
       return ctx.response.safeStatus(error.status || 500).json({
         success: false,
         message: 'Failed to get user: ' + error.message,
@@ -36,12 +44,12 @@ export default class AdminController {
       }
       const { featured, readId } = await ctx.request.validateUsing(SetFeaturedReadValidator)
       const featuredReads = await Read.query().where('featured', true)
-      if (featured === false && featuredReads.length === 2) {
-        return ctx.response.safeStatus(500).json({
-          success: false,
-          message: 'Il faut un minimum de 2 articles en vedette',
-        })
-      }
+      // if (featured === false && featuredReads.length === 2) {
+      //   return ctx.response.safeStatus(500).json({
+      //     success: false,
+      //     message: 'Il faut un minimum de 2 articles en vedette',
+      //   })
+      // }
       if (featured === true && featuredReads.length === 3) {
         return ctx.response.safeStatus(500).json({
           success: false,
@@ -62,6 +70,13 @@ export default class AdminController {
       })
     } catch (error) {
       console.error(error)
+      rollbar.error(error, {
+        request: {
+          url: ctx.request.completeUrl(true),
+          method: ctx.request.method(),
+          body: ctx.request.body(),
+        },
+      })
       return ctx.response.safeStatus(error.status || 500).json({
         success: false,
         message: 'Failed to get user: ' + error.message,
