@@ -84,6 +84,16 @@ export default class AuthController {
         })
       }
       await User.create({ ...data, role: 1 })
+      await resend.emails.send({
+        from: 'Onboarding - De vous à moi <hello@messarae.com>',
+        to: data.email,
+        template: {
+          id: 'welcoming',
+          variables: {
+            FIRSTNAME: data.firstName,
+          },
+        },
+      })
       return ctx.response.safeStatus(201).json({
         success: true,
         user: {
