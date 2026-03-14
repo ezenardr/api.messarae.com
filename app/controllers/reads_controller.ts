@@ -5,6 +5,7 @@ import {
   AddToFavorite,
   PublishReadValidator,
   SaveReadDraftValidator,
+  SaveReadValidator,
 } from '#validators/read'
 import type { HttpContext } from '@adonisjs/core/http'
 import AppwriteStorageService from '#services/storage_service'
@@ -267,6 +268,72 @@ export default class ReadsController {
       return ctx.response.safeStatus(200).json({
         success: true,
         draft: read,
+      })
+    } catch (error) {
+      console.error(error)
+      rollbar.error(error, {
+        request: {
+          url: ctx.request.completeUrl(true),
+          method: ctx.request.method(),
+          body: ctx.request.body(),
+        },
+      })
+      return ctx.response.safeStatus(error.status || 500).json({
+        success: false,
+        message: 'Une erreure est survenue: ' + error.message,
+      })
+    }
+  }
+
+  async saveRead(ctx: HttpContext) {
+    try {
+      const { readId } = ctx.request.params()
+      const user = await ctx.auth.authenticate()
+      if (await ctx.bouncer.with(UserPolicies).denies('createReads')) {
+        return ctx.response.safeStatus(403).json({
+          success: false,
+          message: "Vous n'êtes pas autorisé à créer d'article",
+        })
+      }
+      const read = await Read.findBy('readId', readId)
+      if (!read) {
+        return ctx.response.safeStatus(404).json({
+          success: false,
+          message: 'Article introuvable',
+        })
+      }
+      if (user.userId !== read.userId) {
+        return ctx.response.safeStatus(403).json({
+          success: false,
+          message: "Vous n'êtes pas autorisé à modifier cet article",
+        })
+      }
+      const { headers, ...payload } = await ctx.request.validateUsing(SaveReadValidator)
+      if (payload.image) {
+        if (read.imageFileId) {
+          await AppwriteStorageService.deleteFile(read.imageFileId)
+        }
+        const fs = await import('node:fs/promises')
+        const fileBuffer = await fs.readFile(payload.image?.tmpPath!)
+        const uploaded = await AppwriteStorageService.upload(fileBuffer, read.readId)
+        read.title = payload.title
+        read.description = payload.description
+        read.content = payload.content
+        read.category = payload.category
+        read.imageUrl = AppwriteStorageService.getPreviewUrl(uploaded.$id)
+        read.imageFileId = uploaded.$id
+        await read.save()
+      } else {
+        read.title = payload.title
+        read.description = payload.description
+        read.content = payload.content
+        read.category = payload.category
+        await read.save()
+      }
+
+      return ctx.response.safeStatus(200).json({
+        success: true,
+        read,
       })
     } catch (error) {
       console.error(error)

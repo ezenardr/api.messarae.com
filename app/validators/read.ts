@@ -14,6 +14,20 @@ export const SaveReadDraftValidator = vine.compile(
   })
 )
 
+export const SaveReadValidator = vine.compile(
+  vine.object({
+    title: vine.string(),
+    description: vine.string(),
+    content: vine.string(),
+    category: vine.string(),
+    image: vine.file({ size: '1024kb' }),
+    headers: vine.object({
+      'origin': vine.string(),
+      'accept-language': vine.string(),
+    }),
+  })
+)
+
 export const PublishReadValidator = vine.compile(
   vine.object({
     featured: vine.boolean(),

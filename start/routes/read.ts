@@ -15,6 +15,7 @@ router
     router.delete('/drafts/:readDraftId', [ReadsController, 'deleteDraftRead'])
     router.post('/create', [ReadsController, 'publishRead'])
     router.get('/:readId', [ReadsController, 'getReadById'])
+    router.put('/:readId', [ReadsController, 'saveRead'])
   })
   .prefix('/reads')
   .use(middleware.auth())
