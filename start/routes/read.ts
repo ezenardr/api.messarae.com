@@ -10,6 +10,7 @@ router.get('/reads/:slug/related', [ReadsController, 'getReadBySlugWithRelated']
 router
   .group(() => {
     router.get('/drafts/:readDraftId', [ReadsController, 'getDraftRead'])
+    router.post('/draft/inline-image', [ReadsController, 'uploadInlineImage'])
     router.post('/drafts', [ReadsController, 'createDraftRead'])
     router.put('/drafts/:readDraftId', [ReadsController, 'saveDraftRead'])
     router.delete('/drafts/:readDraftId', [ReadsController, 'deleteDraftRead'])

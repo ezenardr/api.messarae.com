@@ -183,6 +183,63 @@ export default class ReadsController {
     }
   }
 
+  async uploadInlineImage(ctx: HttpContext) {
+    try {
+      const user = await ctx.auth.authenticate()
+      if (await ctx.bouncer.with(UserPolicies).denies('createReads')) {
+        return ctx.response.safeStatus(403).json({
+          success: false,
+          message: "Vous n'êtes pas autorisé à uploader une image",
+        })
+      }
+
+      const image = ctx.request.file('file', {
+        size: '10mb',
+        extnames: ['jpg', 'jpeg', 'png', 'webp'],
+      })
+
+      if (!image) {
+        return ctx.response.safeStatus(400).json({
+          success: false,
+          message: 'Aucune image fournie',
+        })
+      }
+
+      if (!image.isValid) {
+        return ctx.response.safeStatus(422).json({
+          success: false,
+          message: image.errors,
+        })
+      }
+
+      const fs = await import('node:fs/promises')
+      const fileBuffer = await fs.readFile(image.tmpPath!)
+      // Use userId as fileId prefix to be able to clean up orphaned images later
+      const fileId = `inline_${user.userId}_${Date.now()}`
+      const uploaded = await AppwriteStorageService.upload(fileBuffer, fileId)
+      const url = AppwriteStorageService.getPreviewUrl(uploaded.$id)
+
+      return ctx.response.safeStatus(200).json({
+        success: true,
+        url,
+        fileId: uploaded.$id,
+      })
+    } catch (error) {
+      console.error(error)
+      rollbar.error(error, {
+        request: {
+          url: ctx.request.completeUrl(true),
+          method: ctx.request.method(),
+          body: ctx.request.body(),
+        },
+      })
+      return ctx.response.safeStatus(error.status || 500).json({
+        success: false,
+        message: 'Une erreure est survenue: ' + error.message,
+      })
+    }
+  }
+
   async deleteDraftRead(ctx: HttpContext) {
     try {
       const { readDraftId } = ctx.request.params()
