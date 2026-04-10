@@ -44,6 +44,33 @@ export default class ReadsController {
     }
   }
 
+  async getFeaturedReads(ctx: HttpContext) {
+    try {
+      const reads = await Read.query()
+        .where('featured', true)
+        .preload('user')
+        .preload('favorites')
+        .orderBy('created_at', 'desc')
+      return ctx.response.safeStatus(200).json({
+        success: true,
+        reads,
+      })
+    } catch (error) {
+      console.error(error)
+      rollbar.error(error, {
+        request: {
+          url: ctx.request.completeUrl(true),
+          method: ctx.request.method(),
+          body: ctx.request.body(),
+        },
+      })
+      return ctx.response.safeStatus(error.status || 500).json({
+        success: false,
+        message: 'Une erreure est survenue: ' + error.message,
+      })
+    }
+  }
+
   async createDraftRead(ctx: HttpContext) {
     try {
       const user = await ctx.auth.authenticate()
