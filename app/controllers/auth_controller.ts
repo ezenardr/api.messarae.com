@@ -13,6 +13,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken'
 import hash from '@adonisjs/core/services/hash'
 import { DateTime } from 'luxon'
 import rollbar from '#services/rollbar'
+import AuthEmailService from '#services/emails/auth'
 
 const resend = new Resend(env.get('RESEND_API_KEY'))
 
@@ -36,19 +37,14 @@ export default class AuthController {
           password: payload.password,
         },
         env.get('JWT_SECRET'),
-        { expiresIn: '2h' }
+        { expiresIn: '10m' }
       )
       const verificationLink = `${headers.origin}/auth/register/verified?entity=Inscription&currentStep=2&totalStep=2&accessToken=${registrationToken}`
-      await resend.emails.send({
-        from: 'Onboarding - De vous à moi <auth@messarae.com>',
-        to: payload.email,
-        template: {
-          id: 'email-confirmation',
-          variables: {
-            FIRSTNAME: payload.firstName,
-            LINK: verificationLink,
-          },
-        },
+      const emailService = new AuthEmailService()
+      await emailService.sendVerificationEmail({
+        email: payload.email,
+        firstName: payload.firstName,
+        verificationUrl: verificationLink,
       })
       return ctx.response.safeStatus(201).json({
         success: true,
