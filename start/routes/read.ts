@@ -7,7 +7,7 @@ router.get('/categories/:category', [ReadsController, 'getArticleForCategory'])
 router.get('/reads/:limit?', [ReadsController, 'getReads'])
 router.get('/featured/reads', [ReadsController, 'getFeaturedReads'])
 router.get('/reads/:slug', [ReadsController, 'getReadBySlug'])
-router.get('/reads/:slug/related', [ReadsController, 'getReadBySlugWithRelated'])
+router.get('/reads/:readId/related', [ReadsController, 'getReadByIdWithRelated'])
 router
   .group(() => {
     router.get('/drafts/:readDraftId', [ReadsController, 'getDraftRead'])

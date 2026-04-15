@@ -541,12 +541,11 @@ export default class ReadsController {
     }
   }
 
-  async getReadBySlugWithRelated(ctx: HttpContext) {
+  async getReadByIdWithRelated(ctx: HttpContext) {
     try {
-      const { slug } = ctx.request.params()
-      const title = deslugify(slug)
+      const { readId } = ctx.request.params()
       const read = await Read.query()
-        .where('title', title)
+        .where('readId', readId)
         .preload('user')
         .preload('readComments', (comment) => comment.preload('user'))
         .preload('favorites')
