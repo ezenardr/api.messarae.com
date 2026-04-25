@@ -12,6 +12,7 @@ import './routes/auth.js'
 import './routes/read.js'
 import './routes/user.js'
 import './routes/admin.js'
+import './routes/watch.js'
 const UsersController = () => import('#controllers/users_controller')
 
 router.get('/', async () => {
