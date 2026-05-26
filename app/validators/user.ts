@@ -28,7 +28,7 @@ export const updateUserNotificationPreferenceValidator = vine.compile(
 
 export const uploadProfileImageValidator = vine.compile(
   vine.object({
-    image: vine.file({ size: '1024kb' }).optional().nullable(),
+    image: vine.file().optional().nullable(),
 
     headers: vine.object({
       'origin': vine.string(),
